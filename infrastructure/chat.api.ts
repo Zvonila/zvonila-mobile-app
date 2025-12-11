@@ -1,9 +1,9 @@
 import { BACKEND_URL } from "@/constants"
 import { AuthCredType } from "@/entities/auth.entities"
-import { ChatType, CreateChatCredType, CreateChatResType, DeleteChatCredType } from "@/entities/chats.entities"
+import { ChatWithDetailsType, CreateChatCredType, CreateChatResType, DeleteChatCredType } from "@/entities/chats.entities"
 import { useApi } from "@/hooks/useApi"
 
-export const getChats = (cred: AuthCredType) => useApi<ChatType[]>(() => {
+export const getChats = (cred: AuthCredType) => useApi<ChatWithDetailsType[]>(() => {
     return fetch(`${BACKEND_URL}/chats`, {
         method: "GET",
         headers: {

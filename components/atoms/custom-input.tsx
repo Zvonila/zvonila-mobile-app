@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { StyleSheet, Text, TextInput, TextInputProps, View } from "react-native";
 
 type CustomInputProps = TextInputProps & {
@@ -5,25 +6,30 @@ type CustomInputProps = TextInputProps & {
     error?: string;
 };
 
-export function CustomInput({ label, error, style, ...rest }: CustomInputProps) {
-    return (
-        <View style={styles.container}>
-            {label && <Text style={styles.label}>{label}</Text>}
+export const CustomInput = forwardRef<TextInput, CustomInputProps>(
+    ({ label, error, style, ...rest }, ref) => {
+        return (
+            <View style={styles.container}>
+                {label && <Text style={styles.label}>{label}</Text>}
 
-            <TextInput
-                {...rest}
-                style={[
-                    styles.input,
-                    error && styles.inputError,
-                    style,
-                ]}
-                placeholderTextColor="#8A8A8A"
-            />
+                <TextInput
+                    ref={ref}
+                    {...rest}
+                    style={[
+                        styles.input,
+                        error && styles.inputError,
+                        style,
+                    ]}
+                    placeholderTextColor="#8A8A8A"
+                />
 
-            {error && <Text style={styles.error}>{error}</Text>}
-        </View>
-    );
-}
+                {error && <Text style={styles.error}>{error}</Text>}
+            </View>
+        );
+    }
+);
+
+CustomInput.displayName = "Input"
 
 const styles = StyleSheet.create({
     container: {
@@ -39,10 +45,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24,
         paddingVertical: 24,
         fontSize: 16,
-        color: "#000",
-        backgroundColor: "#e4e4e4ff",
+        color: "#151618",
+        backgroundColor: "#F4F5F9",
     },
     inputError: {
+        borderWidth: 1,
         borderColor: "red",
     },
     error: {

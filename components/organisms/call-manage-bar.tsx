@@ -2,7 +2,11 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { FC } from "react";
 import { StyleSheet, View } from "react-native";
 
-export const CallManageBar: FC = () => {
+interface CallManageBarProps {
+    toggleFacing: () => void;
+}
+
+export const CallManageBar: FC<CallManageBarProps> = (props) => {
     return (
         <View style={styles.bar}>
             <MaterialIcons
@@ -24,6 +28,7 @@ export const CallManageBar: FC = () => {
             <MaterialIcons
                 name="switch-video"
                 size={24}
+                onPress={props.toggleFacing}
             />
         </View>
     )

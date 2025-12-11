@@ -8,7 +8,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 
 export default function SettingsScreen() {
     const { user, changePassword, changeName } = useAuthStore();
-    const [name, setName] = useState<string>("Гикита");
+    const [name, setName] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [newPassword, setNewPassword] = useState<string>("");
 
@@ -34,13 +34,17 @@ export default function SettingsScreen() {
 
     useEffect(() => {
         setName(user?.name || "")
-    }, [])
+    }, [user?.name])
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <HorizontalContainer>
                 <View style={styles.page}>
-                    <Avatar size={165} />
+                    <Avatar
+                        size={165}
+                        name={user?.name || "User"}
+                        url={user?.avatar_url}
+                    />
 
                     <CustomInput
                         label="Изменить имя"

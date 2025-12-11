@@ -1,14 +1,18 @@
 import { CustomButton } from '@/components/atoms/custom-button';
 import { HorizontalContainer } from '@/components/atoms/horizontal-container';
 import { CallManageBar } from '@/components/organisms/call-manage-bar';
+import { useCallListener } from '@/hooks/useCallWebSocket';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function CallScreen() {
-    const [facing, setFacing] = useState<CameraType>('back');
+    const [facing, setFacing] = useState<CameraType>('front');
     const [permission, requestPermission] = useCameraPermissions();
+
+    useCallListener();
+
 
     function toggleCameraFacing() {
         setFacing(current => (current === 'back' ? 'front' : 'back'));
@@ -45,7 +49,9 @@ export default function CallScreen() {
                 <HorizontalContainer>
                     <View style={styles.bottomContent}>
                         <CameraView style={styles.miniCamera} facing={facing} />
-                        <CallManageBar />
+                        <CallManageBar
+                            toggleFacing={() => toggleCameraFacing()}
+                        />
                     </View>
                 </HorizontalContainer>
             </View>

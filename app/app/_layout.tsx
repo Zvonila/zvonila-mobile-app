@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "@/constants";
+import { WEBSOCKET_URL } from "@/constants";
 import { getToken } from "@/utils/access-token.utils";
 import { WebSocketProvider } from "@/utils/websockets";
 import { Stack } from "expo-router";
@@ -20,12 +20,16 @@ export default function AppLayout() {
   // Пока токен загружается — просто рендерим загрузку
   if (!token) return null;
 
-  const wsUrl = `${BACKEND_URL}/ws/${token}`;
+  const wsUrl = `${WEBSOCKET_URL}/ws/${token}`;
 
   return (
     <WebSocketProvider url={wsUrl}>
       <SafeAreaView style={styles.page}>
-        <Stack screenOptions={{ headerShown: false, animation: "none" }} />
+        <Stack screenOptions={{
+          headerShown: false,
+          animation: "none",
+          contentStyle: { backgroundColor: "#ffffff" }
+        }} />
       </SafeAreaView>
     </WebSocketProvider>
   );

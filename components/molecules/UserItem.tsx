@@ -35,6 +35,7 @@ export const UserItem: FC<UserType> = (props) => {
             <View style={styles.row}>
                 <Avatar
                     size={64}
+                    name={name}
                     url={avatar_url}
                 />
                 <Text>{name}</Text>

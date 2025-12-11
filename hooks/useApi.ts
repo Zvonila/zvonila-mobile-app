@@ -1,20 +1,36 @@
-
 export type ResponseType<T> = {
     data?: T;
     error?: string;
-}
+};
 
 export const useApi = async <ResT>(
     fetchFunc: () => Promise<Response>
 ): Promise<ResponseType<ResT>> => {
     try {
-        const response = await fetchFunc()
-        if (!response.ok) throw Error("Request Error")
-        const data = await response.json() as ResT
-    console.log(data)
-        return { data }
-    } catch (error) {
-        console.log(error)
-        return { error: "Request Error" }
+        const response = await fetchFunc();
+
+        if (!response.ok) {
+            console.log(response.status)
+            let errorMessage = "Ошибка запроса";
+
+            try {
+                const errorData = await response.json();
+                if (typeof errorData === "object" && errorData?.detail) {
+                    errorMessage = errorData.detail;
+                }
+                if (typeof errorData === "string") {
+                    errorMessage = errorData;
+                }
+            } catch (_) {
+            }
+
+            return { error: errorMessage };
+        }
+
+        const data = (await response.json()) as ResT;
+        return { data };
+    } catch (err) {
+        console.log("API ERROR:", err);
+        return { error: "Network error" };
     }
-} 
+};

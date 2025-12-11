@@ -13,7 +13,7 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  const [loaded] = useFonts({
+  useFonts({
     MontserratBlack: require("../assets/fonts/Montserrat-Black.ttf"),
     MontserratBold: require("../assets/fonts/Montserrat-Bold.ttf"),
     MontserratExtraLight: require("../assets/fonts/Montserrat-ExtraLight.ttf"),
@@ -35,16 +35,11 @@ export default function RootLayout() {
         await verify();
       }
       const authResult = await isAuth();
-      console.log(authResult)
       setAuth(authResult);
       setAuthChecked(true);
     };
     checkAuth();
-  }, []);
-
-  useEffect(() => {
-    console.log(auth)
-  }, [auth])
+  }, [isAuth, verify]);
 
   if (!authChecked) {
     return <Text>loading</Text>; // или спиннер
@@ -52,7 +47,11 @@ export default function RootLayout() {
 
   return (
     <Fragment>
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
         {auth ? (
           <Stack.Screen name="app" options={{ headerShown: false }} />
         ) : (

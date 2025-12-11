@@ -10,6 +10,8 @@ export type AuthCredType = {
     access_token: string;
 }
 
+export type AuthCred<T> = T & AuthCredType;
+
 // Login
 export type LoginCredType = {
     email: string;

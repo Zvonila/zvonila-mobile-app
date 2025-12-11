@@ -1,54 +1,47 @@
+import { MessageType } from "@/entities/messsages.entities";
 import { UserType } from "@/entities/user.entities";
-import { getUser } from "@/infrastructure/users.api";
-import { getToken } from "@/utils/access-token.utils";
-import { FC, useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { formatMessageTime } from "@/utils/format-message-time";
+import { FC } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Avatar } from "../atoms/avatar";
 
-export const ChatItem: FC<{user_id: number}> = ({user_id}) => {
-    const [user, setUser] = useState<UserType | null>(null)
-    
-    useEffect(() => {
-        const load = async () => {
-            const token = await getToken() || "";
-            const res = await getUser({ id: user_id, access_token: token })
-            if (res.error) return;
-            if (res.data) {
-                setUser(res.data)
-            }
-        }
-        load()
-    }, [])
+interface ChatItemProps {
+    user: UserType;
+    last_message?: MessageType;
+}
 
+export const ChatItem: FC<ChatItemProps> = ({ user, last_message }) => {
     return (
         <View style={styles.card}>
             {/* Аватар */}
-            <View style={styles.image_container}>
-                <Image
-                    source={{
-                        uri: user?.avatar_url,
-                    }}
-                    style={styles.image}
-                    resizeMode="cover"
-                />
-            </View>
+            <Avatar
+                size={48}
+                name={user.name}
+                url={user.avatar_url}
+            />
 
             {/* Основной контент */}
             <View style={styles.info}>
                 <View style={styles.info_row}>
-                    <Text style={styles.name}>{user?.name}</Text>
-                    <Text style={styles.time}>18ч</Text>
+                    <Text style={styles.name}>{user.name}</Text>
+                    {last_message && (
+                        <Text style={styles.time}>
+                            {formatMessageTime(last_message.created_at)}
+                        </Text>
+                    )}
                 </View>
 
-
-                <View style={styles.info_row}>
-                    <Text
-                        style={styles.message}
-                        numberOfLines={2}
-                        ellipsizeMode="tail"
-                    >
-                        Ты девочке вчера звонил? Вопрос тихо мирно будем решать или мои волки подъедут?
-                    </Text>
-                </View>
+                {last_message && (
+                    <View style={styles.info_row}>
+                        <Text
+                            style={styles.message}
+                            numberOfLines={2}
+                            ellipsizeMode="tail"
+                        >
+                            {last_message.text}
+                        </Text>
+                    </View>
+                )}
             </View>
         </View>
     );
@@ -57,21 +50,10 @@ export const ChatItem: FC<{user_id: number}> = ({user_id}) => {
 const styles = StyleSheet.create({
     card: {
         flexDirection: "row",
-        alignItems: "center",
+        alignItems: "flex-start",
         width: "100%",
         height: "auto",
         gap: 8,
-    },
-    image_container: {
-        width: 48,
-        height: 48,
-        borderRadius: 24, // круглый аватар
-        overflow: "hidden",
-        backgroundColor: "#E4E4E4",
-    },
-    image: {
-        width: "100%",
-        height: "100%",
     },
     info: {
         flex: 1,
@@ -79,7 +61,7 @@ const styles = StyleSheet.create({
     },
     info_row: {
         flexDirection: "row",
-        alignItems: "center",
+        alignItems: "flex-start",
         gap: 8,
     },
     name: {

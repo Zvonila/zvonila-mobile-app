@@ -40,6 +40,7 @@ export const WebSocketProvider = ({
     ws.onmessage = (event) => {
       try {
         setLastMessage(JSON.parse(event.data));
+        console.log("LAST MESSAGE: ", JSON.parse(event.data).data)
       } catch {
         setLastMessage(event.data);
       }

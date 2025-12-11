@@ -1,1 +1,2 @@
-export const BACKEND_URL = "http://192.168.31.48:8000/api/v1"
+export const BACKEND_URL = "http://app.postfusion.tech/api/v1"
+export const WEBSOCKET_URL = "ws://app.postfusion.tech/api/v1"

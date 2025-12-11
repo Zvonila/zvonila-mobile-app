@@ -16,7 +16,7 @@ export default function ProfileScreen() {
   return (
     <HorizontalContainer>
       <View style={styles.settings}>
-        <Avatar size={165} url={user?.avatar_url} />
+        <Avatar size={165} name={user?.name || "User"} url={user?.avatar_url} />
         <Text style={styles.name}>{user?.name}</Text>
         <CustomButton fullWidth title="Настройки" onPress={() => router.navigate("/app/settings")} />
         <CustomButton fullWidth title="Выйти" onPress={logoutHandler} />

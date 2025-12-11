@@ -11,13 +11,13 @@ export default function UsersScreen() {
 
     useEffect(() => {
         fetchUsers()
-    }, [])
+    }, [fetchUsers])
 
     return (
         <HorizontalContainer>
             <View style={styles.settings}>
                 {users.filter(el => el.id !== user?.id).map(user => (
-                    <UserItem {...user} />
+                    <UserItem key={user.id} {...user} />
                 ))}
             </View>
         </HorizontalContainer>

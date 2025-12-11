@@ -1,3 +1,4 @@
+import { AuthCredType } from "./auth.entities";
 
 export type MessageType = {
     id: number;
@@ -14,6 +15,8 @@ export type GetMessagesCredType = {
     offset: number;
 }
 
+export type GetMessagesCred = GetMessagesCredType & AuthCredType;
+
 export type GetMessagesResType = MessageType[];
 
 // CreateChat
@@ -22,9 +25,16 @@ export type CreateMessageCredType = {
     text: string;
 }
 
+export type CreateMessageCred = CreateMessageCredType & AuthCredType;
+
 export type CreateMessageResType = MessageType;
 
 // DeleteMessage
 export type DeleteMessageCredType = {
     message_id: number;
+}
+
+// Get Last Chat Message
+export type GetLastChatMessageCred = {
+    chat_id: number;
 }
