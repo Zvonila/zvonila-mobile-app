@@ -1,3 +1,4 @@
+import { ConnectionStatus } from "@/components/organisms/connection-status";
 import { WEBSOCKET_URL } from "@/constants";
 import { getToken } from "@/utils/access-token.utils";
 import { WebSocketProvider } from "@/utils/websockets";
@@ -25,6 +26,7 @@ export default function AppLayout() {
   return (
     <WebSocketProvider url={wsUrl}>
       <SafeAreaView style={styles.page}>
+        <ConnectionStatus />
         <Stack screenOptions={{
           headerShown: false,
           animation: "none",
