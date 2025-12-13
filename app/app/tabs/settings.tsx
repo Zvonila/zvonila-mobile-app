@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 export default function SettingsScreen() {
-    const { user, changePassword, changeName } = useAuthStore();
+    const { user, changePassword, changeName, logout } = useAuthStore();
     const [name, setName] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [newPassword, setNewPassword] = useState<string>("");
@@ -68,6 +68,8 @@ export default function SettingsScreen() {
                         onChangeText={setNewPassword}
                     />
                     <CustomButton fullWidth title="Изменить" onPress={changePasswordHandler} />
+                
+                    <CustomButton fullWidth title="Выйти" onPress={logout} />
                 </View>
             </HorizontalContainer>
         </ScrollView>

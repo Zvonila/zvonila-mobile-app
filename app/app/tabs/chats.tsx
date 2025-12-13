@@ -1,4 +1,3 @@
-import { CustomInput } from "@/components/atoms/custom-input";
 import { HorizontalContainer } from "@/components/atoms/horizontal-container";
 import { ChatItem } from "@/components/molecules/ChatItem";
 import { useChatWebSocket } from "@/hooks/useChatWebSocket";
@@ -6,7 +5,7 @@ import { useMessagesWebSocket } from "@/hooks/useMessagesWebSocket";
 import { useChatsStore } from "@/stores/chats.store";
 import { router } from "expo-router";
 import { useEffect } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function ChatsScreen() {
   const { fetchChats } = useChatsStore();
@@ -19,53 +18,48 @@ export default function ChatsScreen() {
   }, [fetchChats])
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.container}
+    >
       <HorizontalContainer>
-        <CustomInput placeholder="Поиск" />
-      </HorizontalContainer>
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 40,
-          height: "100%"
-        }}
-      >
-        {chats.map(chat => (
-          <HorizontalContainer key={chat.id}>
+        <Text style={styles.title}>Чаты</Text>
+        {chats.length === 0 && (
+          <Text>Создайте чат через "Ускорялку"</Text>
+        )}
+        <View style={styles.chat_list}>
+          {chats.map(chat => (
             <Pressable
-              
+              key={chat.id}
               onPress={() => router.push({
                 pathname: "/app/chat/[id]",
                 params: { id: chat.id }
               })}
-              style={({ pressed }) => [
-                styles.button,
-                pressed && styles.buttonPressed
-              ]}
             >
               <ChatItem
                 user={chat.companion}
                 last_message={chat.last_message}
               />
             </Pressable>
-          </HorizontalContainer>
-        ))}
-      </ScrollView>
-    </View>
+          ))}
+        </View>
+      </HorizontalContainer>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    paddingTop: 24,
+    height: "100%",
   },
-  button: {
-    paddingVertical: 8
+  title: {
+    fontFamily: "MontserratSemiBold",
+    fontSize: 18,
+    marginBottom: 8,
   },
-  buttonPressed: {
-    backgroundColor: "#cfcfcf59",
-    padding: 8,
-    borderRadius: 14
+  chat_list: {
+    flexDirection: "column",
+    gap: 14
   }
 });

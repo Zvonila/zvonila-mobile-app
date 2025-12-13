@@ -28,7 +28,7 @@ export default function AppLayout() {
         <Stack screenOptions={{
           headerShown: false,
           animation: "none",
-          contentStyle: { backgroundColor: "#ffffff" }
+          contentStyle: { backgroundColor: "#F5F5F5" }
         }} />
       </SafeAreaView>
     </WebSocketProvider>

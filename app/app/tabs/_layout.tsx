@@ -11,7 +11,7 @@ export default function TabsLayout() {
       <Stack screenOptions={{
         headerShown: false,
         animation: "none",
-        contentStyle: { backgroundColor: "#ffffff" }
+        contentStyle: { backgroundColor: "#F5F5F5" }
       }} />
       <NavigationBar />
     </View>
@@ -20,7 +20,6 @@ export default function TabsLayout() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 14,
     flex: 1,
   },
   stack: {
