@@ -11,6 +11,13 @@ export const NavigationBar: FC = () => {
     return (
         <View style={styles.container}>
             <Pressable
+                style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    paddingRight: 30,
+                }}
                 onPress={() => router.push("/app/tabs/chats")}
             >
                 <ChatCircleIcon
@@ -23,9 +30,18 @@ export const NavigationBar: FC = () => {
                 />
             </Pressable>
 
-            <AccelerationModal />
+            <View style={{ paddingVertical: 12 }}>
+                <AccelerationModal />
+            </View>
 
             <Pressable
+                style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    paddingLeft: 30,
+                }}
                 onPress={() => router.push("/app/tabs/settings")}
             >
                 <UserIcon
@@ -44,10 +60,7 @@ export const NavigationBar: FC = () => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#FFFFFF",
-        paddingVertical: 12,
         flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 40
+        gap: 10,
     },
 });
