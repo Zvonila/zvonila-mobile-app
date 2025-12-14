@@ -8,10 +8,6 @@ import { getToken } from "@/utils/access-token.utils";
 import { Fragment, useEffect, useState } from 'react';
 import { Text } from "react-native";
 
-export const unstable_settings = {
-  // anchor: '(app)',
-};
-
 export default function RootLayout() {
   useFonts({
     MontserratBlack: require("../assets/fonts/Montserrat-Black.ttf"),
