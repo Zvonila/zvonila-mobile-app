@@ -1,4 +1,3 @@
-// WebSocketContext.tsx
 import React, {
   createContext,
   useContext,
@@ -29,37 +28,49 @@ export const WebSocketProvider = ({
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const ws = new WebSocket(url);
-    wsRef.current = ws;
+    const createConnection = () => {
+      const ws = new WebSocket(url);
+      wsRef.current = ws;
 
-    ws.onopen = () => {
-      console.log("WS connected");
-      setReady(true);
-    };
+      ws.onopen = () => {
+        console.log("WS connected");
+        setReady(true);
+      };
 
-    ws.onmessage = (event) => {
-      try {
-        setLastMessage(JSON.parse(event.data));
-        console.log("LAST MESSAGE: ", JSON.parse(event.data).data)
-      } catch {
-        setLastMessage(event.data);
+      ws.onmessage = (event) => {
+        try {
+          setLastMessage(JSON.parse(event.data));
+          console.log("LAST MESSAGE: ", JSON.parse(event.data).data)
+        } catch {
+          setLastMessage(event.data);
+        }
+      };
+
+      ws.onclose = () => {
+        console.log("WS disconnected");
+        setReady(false);
+        // Авто-переподключение
+        setTimeout(() => {
+          console.log("WS reconnected")
+          createConnection();
+        }, 1500);
+      };
+
+      ws.onerror = (err) => {
+        console.warn("WS error", err);
+      };
+
+      return ws
+    }
+
+    createConnection()
+
+    return () => {
+      if (wsRef.current) {
+        console.log("WS Close")
+        wsRef.current.close() 
       }
     };
-
-    ws.onclose = () => {
-      console.log("WS disconnected");
-      setReady(false);
-      // Авто-переподключение
-      setTimeout(() => {
-        wsRef.current = new WebSocket(url);
-      }, 1500);
-    };
-
-    ws.onerror = (err) => {
-      console.warn("WS error", err);
-    };
-
-    return () => ws.close();
   }, [url]);
 
   const sendMessage = (msg: string | object) => {

@@ -19,7 +19,6 @@ export const useChatsStore = create<Store>((set, get) => ({
         const token = await getToken() || "";
         const res = await getChats({ access_token: token })
         if (res.data && !res.error) {
-            console.log(res.data)
             set({ chats: res.data })
         }
 

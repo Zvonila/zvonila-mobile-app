@@ -10,7 +10,6 @@ export const useApi = async <ResT>(
         const response = await fetchFunc();
 
         if (!response.ok) {
-            console.log(response.status)
             let errorMessage = "Ошибка запроса";
 
             try {
