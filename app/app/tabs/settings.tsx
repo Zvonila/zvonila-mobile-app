@@ -1,75 +1,67 @@
+import LockIcon from "@/assets/icons/lock";
+import PencilIcon from "@/assets/icons/pencil";
 import { Avatar } from "@/components/atoms/avatar";
+import { Card } from "@/components/atoms/card";
 import { CustomButton } from "@/components/atoms/custom-button";
-import { CustomInput } from "@/components/atoms/custom-input";
 import { HorizontalContainer } from "@/components/atoms/horizontal-container";
 import { useAuthStore } from "@/stores/auth.store";
-import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { router } from "expo-router";
+import { useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function SettingsScreen() {
-    const { user, changePassword, changeName, logout } = useAuthStore();
-    const [name, setName] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [newPassword, setNewPassword] = useState<string>("");
+    const { logout } = useAuthStore();
+    const user = useAuthStore(state => state.user);
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const changePasswordHandler = async () => {
-        if (password.length === 0 || newPassword.length === 0) return;
-        const res = await changePassword({
-            password: password,
-            new_password: newPassword,
-        })
+    const logoutHandler = async () => {
+        setIsLoading(true)
+        const res = await logout();
+        setIsLoading(false)
 
         if (!res.error) {
-            setPassword("");
-            setNewPassword("");
+            router.push("/auth/login")
         }
     }
-
-    const changeNameHandler = async () => {
-        if (name.length === 0) return;
-        await changeName({
-            name: name,
-        })
-    }
-
-    useEffect(() => {
-        setName(user?.name || "")
-    }, [user?.name])
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <HorizontalContainer>
                 <View style={styles.page}>
-                    <Avatar
-                        size={165}
-                        name={user?.name || "User"}
-                        url={user?.avatar_url}
-                    />
 
-                    <CustomInput
-                        label="Изменить имя"
-                        placeholder="Введите имя"
-                        value={name}
-                        onChangeText={setName}
-                    />
-                    <CustomButton fullWidth title="Изменить" onPress={changeNameHandler} />
+                    <Card style={styles.user}>
+                        <Avatar
+                            size={64}
+                            name={user?.name || "User"}
+                            url={user?.avatar_url}
+                        />
+                        <View style={styles.user_info}>
+                            <Text style={styles.user_name}>{user?.name}</Text>
+                            <Text style={styles.user_email}>{user?.email}</Text>
+                        </View>
+                        <Pressable
+                            onPress={() => router.push("/app/settings/profile")}
+                        >
+                            <PencilIcon pathStroke="black" />
+                        </Pressable>
+                    </Card>
 
-                    <CustomInput
-                        label="Старый пароль"
-                        placeholder="Введите старый пароль"
-                        secureTextEntry
-                        value={password}
-                        onChangeText={setPassword}
+                    <Card>
+                        <Pressable
+                            style={styles.sections}
+                            onPress={() => router.push("/app/settings/security")}
+                        >
+                            <LockIcon pathStroke="black" />
+                            <Text>Безопасность</Text>
+                        </Pressable>
+                    </Card>
+
+                    <CustomButton 
+                        fullWidth 
+                        title="Выйти" 
+                        onPress={logoutHandler} 
+                        isLoading={isLoading}
                     />
-                    <CustomInput
-                        label="Новый пароль"
-                        placeholder="Введите новый пароль"
-                        value={newPassword}
-                        onChangeText={setNewPassword}
-                    />
-                    <CustomButton fullWidth title="Изменить" onPress={changePasswordHandler} />
-                
-                    <CustomButton fullWidth title="Выйти" onPress={logout} />
                 </View>
             </HorizontalContainer>
         </ScrollView>
@@ -81,5 +73,29 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         gap: 14,
         alignItems: "center",
+        marginTop: 24,
+    },
+    user: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 8,
+    },
+    user_info: {
+        flexDirection: "column",
+        flex: 1,
+    },
+    user_name: {
+        fontFamily: "MontserratBold",
+        fontSize: 16,
+        lineHeight: 20
+    },
+    user_email: {
+        fontSize: 14,
+    },
+    sections: {
+        flexDirection: "row",
+        gap: 8,
+        paddingVertical: 12,
+        paddingHorizontal: 8
     }
 })

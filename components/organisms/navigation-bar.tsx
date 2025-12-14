@@ -1,16 +1,9 @@
 import ChatCircleIcon from "@/assets/icons/chat-circle";
-import SettingsIcon from "@/assets/icons/settings";
-import { Href, router, usePathname } from "expo-router";
+import UserIcon from "@/assets/icons/user";
+import { router, usePathname } from "expo-router";
 import { FC } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { AccelerationModal } from "./acceleration-modal";
-
-const navigationConfig: { id: number, name: string, link: Href, icon: string }[] = [
-    { id: 0, name: "Чаты", link: "/app/tabs/chats", icon: "chat" },
-    { id: 1, name: "Звонки", link: "/app/tabs/calls", icon: "call" },
-    { id: 2, name: "Пользователи", link: "/app/tabs/users", icon: "people" },
-    { id: 3, name: "Профиль", link: "/app/tabs/profile", icon: "person" },
-]
 
 export const NavigationBar: FC = () => {
     const pathname = usePathname();
@@ -35,7 +28,7 @@ export const NavigationBar: FC = () => {
             <Pressable
                 onPress={() => router.push("/app/tabs/settings")}
             >
-                <SettingsIcon
+                <UserIcon
                     pathStroke={
                         pathname === "/app/tabs/settings" ?
                             "black" :
