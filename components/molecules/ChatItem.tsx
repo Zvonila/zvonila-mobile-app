@@ -50,7 +50,7 @@ export const ChatItem: FC<ChatItemProps> = ({ user, last_message }) => {
 const styles = StyleSheet.create({
     card: {
         flexDirection: "row",
-        alignItems: "flex-start",
+        alignItems: "center",
         width: "100%",
         height: "auto",
         gap: 8,
@@ -61,18 +61,18 @@ const styles = StyleSheet.create({
     },
     info_row: {
         flexDirection: "row",
-        alignItems: "flex-start",
+        alignItems: "flex-end",
         gap: 8,
     },
     name: {
-        fontFamily: "MontserratBold",
+        fontFamily: "MontserratSemiBold",
         fontSize: 16,
         marginBottom: -5,
         flex: 1,
     },
     message: {
         fontFamily: "MontserratMedium",
-        fontSize: 14,
+        fontSize: 12,
         color: "#000000",
         opacity: 0.5,
         flex: 1,
