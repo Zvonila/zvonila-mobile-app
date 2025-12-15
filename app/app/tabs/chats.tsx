@@ -24,11 +24,11 @@ export default function ChatsScreen() {
     >
       <HorizontalContainer>
         <Text style={styles.title}>Чаты</Text>
-        {chats.length === 0 && (
+        {chats.filter(el => el.last_message).length === 0 && (
           <Text>Создайте чат через "Ускорялку"</Text>
         )}
         <View style={styles.chat_list}>
-          {chats.map(chat => (
+          {chats.filter(el => el.last_message).map(chat => (
             <Pressable
               key={chat.id}
               onPress={() => router.push({

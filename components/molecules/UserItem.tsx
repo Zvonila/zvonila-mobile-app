@@ -6,13 +6,13 @@ import { FC } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Avatar } from "../atoms/avatar";
 
-export const UserItem: FC<UserType> = (props) => {
+export const UserItem: FC<UserType & {onClose?: () => void}> = (props) => {
     const { chats, createChat} = useChatsStore()
-    const { id, avatar_url, name } = props;
+    const { id, avatar_url, name, onClose = () => null } = props;
 
     const goToChat = async () => {
         let chat;
-        const findedChatIndex = chats.findIndex(el => el.receiver_id === id);
+        const findedChatIndex = chats.findIndex(el => el.companion.id === id);
         if (findedChatIndex === -1) {
             let { data, error } = await createChat({
                 receiver_id: id
@@ -22,7 +22,9 @@ export const UserItem: FC<UserType> = (props) => {
             chat = data;
         }
 
+        chat = chats[findedChatIndex]
         if (chat) {
+            onClose()
             router.navigate({
                 pathname: "/app/chat/[id]",
                 params: { id: chat?.id }

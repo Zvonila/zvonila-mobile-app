@@ -6,9 +6,10 @@ import { UserItem } from "../molecules/UserItem";
 
 interface UsersListProps {
     search?: string;
+    onClose?: () => void;
 }
 
-export const UsersList: FC<UsersListProps> = ({ search }) => {
+export const UsersList: FC<UsersListProps> = ({ search, onClose }) => {
     const { user } = useAuthStore();
     const { users, fetchUsers } = useUsersStore();
 
@@ -33,7 +34,11 @@ export const UsersList: FC<UsersListProps> = ({ search }) => {
             showsVerticalScrollIndicator={false}
         >
             {filteredUsers.map(user => (
-                <UserItem key={user.id} {...user} />
+                <UserItem 
+                    key={user.id} 
+                    {...user} 
+                    onClose={onClose}
+                />
             ))}
         </ScrollView>
     )

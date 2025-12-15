@@ -110,6 +110,7 @@ export const AccelerationModal: FC = () => {
                                 }}>
                                     <UsersList
                                         search={search}
+                                        onClose={() => setIsOpen(false)}
                                     />
                                     <Pressable style={styles.row}>
                                         <CustomInput
