@@ -2,15 +2,18 @@ import SearchIcon from "@/assets/icons/search";
 import { FC, useEffect, useRef, useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
-import ChatDotsIcon from "@/assets/icons/chat-dots";
+import CloseIcon from "@/assets/icons/close";
 import { BlurView } from 'expo-blur';
 import { Animated } from 'react-native';
+import { CustomInput } from "../atoms/custom-input";
 import { HorizontalContainer } from "../atoms/horizontal-container";
+import { UsersList } from "./users-list";
 
 export const AccelerationModal: FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const buttonRef = useRef<View>(null);
     const [layout, setLayout] = useState<any>(null);
+    const [search, setSearch] = useState<string>("");
 
     const scale = useRef(new Animated.Value(0.8)).current;
     const opacity = useRef(new Animated.Value(0)).current;
@@ -24,6 +27,9 @@ export const AccelerationModal: FC = () => {
 
     useEffect(() => {
         if (isOpen) {
+            scale.setValue(0.8);
+            opacity.setValue(0);
+
             Animated.parallel([
                 Animated.spring(scale, {
                     toValue: 1,
@@ -40,7 +46,15 @@ export const AccelerationModal: FC = () => {
 
     return (
         <>
-            <Pressable ref={buttonRef} style={styles.find_btn} onPress={openModal}>
+            <Pressable
+                ref={buttonRef}
+                style={[
+                    styles.find_btn,
+                    isOpen && styles.hidden_btn,
+                ]}
+                onPress={openModal}
+                disabled={isOpen}
+            >
                 <SearchIcon strokeWidth={2} pathStroke="white" />
                 <Text style={styles.find_btn_text}>Ускорялка</Text>
             </Pressable>
@@ -48,6 +62,8 @@ export const AccelerationModal: FC = () => {
             {isOpen && layout && (
                 <Modal transparent animationType="none">
                     <View style={StyleSheet.absoluteFill}>
+
+                        {/* Overlay */}
                         <Pressable
                             style={StyleSheet.absoluteFill}
                             onPress={() => setIsOpen(false)}
@@ -55,13 +71,31 @@ export const AccelerationModal: FC = () => {
                             <BlurView intensity={40} tint="dark" style={StyleSheet.absoluteFill} />
                         </Pressable>
 
+                        {/* КЛОН КНОПКИ */}
+                        <Pressable
+                            style={[
+                                styles.find_btn,
+                                styles.close_btn,
+                                {
+                                    position: "absolute",
+                                    left: layout.x,
+                                    top: layout.y,
+                                    width: layout.width,
+                                    height: layout.height,
+                                },
+                            ]}
+                            onPress={() => setIsOpen(false)}
+                        >
+                            <CloseIcon strokeWidth={2} pathStroke="black" />
+                            <Text style={styles.close_btn_text}>Закрыть</Text>
+                        </Pressable>
 
+                        {/* Контент */}
                         <Animated.View
                             style={{
                                 position: 'absolute',
-                                top: layout.y - layout.height - 50,
+                                bottom: 0 + layout.height + 20,
                                 left: 0,
-                                padding: 16,
                                 opacity,
                                 transform: [{ scale }],
                                 width: "100%",
@@ -74,14 +108,15 @@ export const AccelerationModal: FC = () => {
                                     borderRadius: 16,
                                     padding: 16,
                                 }}>
+                                    <UsersList
+                                        search={search}
+                                    />
                                     <Pressable style={styles.row}>
-                                        <ChatDotsIcon pathStroke="black" />
-                                        <Text style={styles.row_text}>Начать новый чат</Text>
-                                    </Pressable>
-
-                                    <Pressable style={styles.row}>
-                                        <SearchIcon pathStroke="black" />
-                                        <Text style={styles.row_text}>Поиск</Text>
+                                        <CustomInput
+                                            placeholder="Поиск"
+                                            value={search}
+                                            onChangeText={setSearch}
+                                        />
                                     </Pressable>
                                 </View>
                             </HorizontalContainer>
@@ -124,5 +159,16 @@ const styles = StyleSheet.create({
     row_text: {
         fontFamily: "MontserratMedium",
         fontSize: 14
-    }
+    },
+    hidden_btn: {
+        opacity: 0,
+    },
+    close_btn: {
+        backgroundColor: "#ffffff",
+        zIndex: 100,
+    },
+    close_btn_text: {
+        color: "#000000",
+        fontFamily: "MontserratSemiBold",
+    },
 })

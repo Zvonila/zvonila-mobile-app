@@ -1,10 +1,10 @@
+import ChevronLeftIcon from "@/assets/icons/chevron-left";
 import { UserType } from "@/entities/user.entities";
 import { useChatsStore } from "@/stores/chats.store";
 import { router } from "expo-router";
 import { FC } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Avatar } from "../atoms/avatar";
-import { CustomButton } from "../atoms/custom-button";
 
 export const UserItem: FC<UserType> = (props) => {
     const { chats, createChat} = useChatsStore()
@@ -31,23 +31,29 @@ export const UserItem: FC<UserType> = (props) => {
     }
 
     return (
-        <View style={styles.card}>
+        <Pressable style={styles.card} onPress={goToChat}>
             <View style={styles.row}>
                 <Avatar
-                    size={64}
+                    size={48}
                     name={name}
                     url={avatar_url}
                 />
                 <Text>{name}</Text>
             </View>
-            <CustomButton title="Начать чат" onPress={goToChat} />
-        </View>
+            <ChevronLeftIcon 
+                style={{ 
+                    transform: [{ rotate: '180deg' }],
+                }}
+                pathStroke="black"
+            />
+        </Pressable>
     )
 }
 
 const styles = StyleSheet.create({
     card: {
         flexDirection: "row",
+        alignItems: "center",
         justifyContent: "space-between",
         width: "100%",
     },
